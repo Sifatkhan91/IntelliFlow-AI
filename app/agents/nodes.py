@@ -4,22 +4,16 @@ from app.services.llm_service import ask_gemini
 
 from app.agents.analytics_agent import analyze_document
 
+from app.agents.router_agent import classify_intent
+
 
 def router_node(state):
 
-    question = state["question"].lower()
+    intent = classify_intent(
+        state["question"]
+    )
 
-    if "summarize" in question:
-
-        intent = "summary"
-
-    elif "analyze" in question:
-
-        intent = "analytics"
-
-    else:
-
-        intent = "qa"
+    print(f"\nROUTER DECISION: {intent}\n")
 
     return {
         "intent": intent
@@ -61,7 +55,9 @@ def analytics_node(state):
 
     context = "\n\n".join(docs)
 
-    result = analyze_document(context)
+    result = analyze_document(
+        context
+    )
 
     return {
         "answer": result

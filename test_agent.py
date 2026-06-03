@@ -4,11 +4,10 @@ agent = build_graph()
 
 response = agent.invoke(
     {
-        "question":
-        "analyze this document"
+        "question": "Give me the key findings from this document"
     }
 )
 
-print("\nAGENT RESPONSE:\n")
+print("\nFINAL RESPONSE:\n")
 
 print(response["answer"])
