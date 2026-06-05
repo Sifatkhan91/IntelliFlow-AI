@@ -1,4 +1,4 @@
-from app.services.llm_service import ask_gemini
+from app.services.openai_service import ask_openai
 
 
 def analyze_document(text):
@@ -18,4 +18,4 @@ Document:
 {text}
 """
 
-    return ask_gemini(prompt)
+    return ask_openai(prompt)

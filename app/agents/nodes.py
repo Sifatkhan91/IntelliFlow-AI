@@ -1,6 +1,6 @@
 from app.rag.retriever import retrieve_relevant_chunks
 
-from app.services.llm_service import ask_gemini
+from app.services.openai_service import ask_openai
 
 from app.agents.analytics_agent import analyze_document
 
@@ -49,7 +49,7 @@ Content:
 Summary:
 """
 
-    summary = ask_gemini(prompt)
+    summary = ask_openai(prompt)
 
     save_to_memory(
         state["question"],
@@ -117,7 +117,7 @@ Question:
 Answer:
 """
 
-    answer = ask_gemini(prompt)
+    answer = ask_openai(prompt)
 
     save_to_memory(
         state["question"],

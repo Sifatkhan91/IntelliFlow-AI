@@ -1,4 +1,4 @@
-from app.services.llm_service import ask_gemini
+from app.services.openai_service import ask_openai
 
 
 VALID_INTENTS = [
@@ -13,13 +13,13 @@ def classify_intent(question):
     prompt = f"""
 You are an intent classifier.
 
-Choose ONLY ONE:
+Choose ONLY ONE of these intents:
 
 qa
 summary
 analytics
 
-Return ONLY the word.
+Return ONLY the intent word.
 
 Question:
 {question}
@@ -27,7 +27,7 @@ Question:
 
     try:
 
-        result = ask_gemini(prompt)
+        result = ask_openai(prompt)
 
         result = (
             result
@@ -41,7 +41,7 @@ Question:
         if result not in VALID_INTENTS:
 
             print(
-                f"Invalid intent from Gemini: {result}"
+                f"Invalid intent from OpenAI: {result}"
             )
 
             return "qa"
