@@ -2,12 +2,19 @@ from app.agents.graph import build_graph
 
 agent = build_graph()
 
-response = agent.invoke(
-    {
-        "question": "Give me the key findings from this document"
-    }
-)
+while True:
 
-print("\nFINAL RESPONSE:\n")
+    question = input("\nYou: ")
 
-print(response["answer"])
+    if question.lower() == "exit":
+        break
+
+    response = agent.invoke(
+        {
+            "question": question
+        }
+    )
+
+    print("\nAssistant:\n")
+
+    print(response["answer"])

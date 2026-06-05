@@ -12,3 +12,5 @@ class AgentState(TypedDict):
     answer: str
 
     analysis: str
+
+    memory_context: str

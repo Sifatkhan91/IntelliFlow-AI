@@ -1,32 +1,57 @@
 from app.services.llm_service import ask_gemini
 
 
+VALID_INTENTS = [
+    "qa",
+    "summary",
+    "analytics"
+]
+
+
 def classify_intent(question):
 
     prompt = f"""
 You are an intent classifier.
 
-Classify the user request into ONLY ONE of these:
+Choose ONLY ONE:
 
 qa
 summary
 analytics
 
-Rules:
-
-qa = asking questions
-
-summary = requesting summary or overview
-
-analytics = requesting insights, findings, entities, trends, analysis
-
-Return ONLY one word.
+Return ONLY the word.
 
 Question:
-
 {question}
 """
 
-    result = ask_gemini(prompt)
+    try:
 
-    return result.strip().lower()
+        result = ask_gemini(prompt)
+
+        result = (
+            result
+            .strip()
+            .lower()
+            .replace(".", "")
+            .replace(",", "")
+            .replace("\n", "")
+        )
+
+        if result not in VALID_INTENTS:
+
+            print(
+                f"Invalid intent from Gemini: {result}"
+            )
+
+            return "qa"
+
+        return result
+
+    except Exception as e:
+
+        print(
+            f"Router Error: {e}"
+        )
+
+        return "qa"

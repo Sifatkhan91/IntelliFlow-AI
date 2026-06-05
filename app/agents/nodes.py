@@ -6,6 +6,11 @@ from app.agents.analytics_agent import analyze_document
 
 from app.agents.router_agent import classify_intent
 
+from app.memory.memory_manager import (
+    get_memory_context,
+    save_to_memory
+)
+
 
 def router_node(state):
 
@@ -16,7 +21,8 @@ def router_node(state):
     print(f"\nROUTER DECISION: {intent}\n")
 
     return {
-        "intent": intent
+        "intent": intent,
+        "memory_context": get_memory_context()
     }
 
 
@@ -30,7 +36,11 @@ def summary_node(state):
     context = "\n\n".join(docs)
 
     prompt = f"""
-Summarize the following content clearly.
+Conversation History:
+
+{state['memory_context']}
+
+Summarize the following content.
 
 Content:
 
@@ -40,6 +50,11 @@ Summary:
 """
 
     summary = ask_gemini(prompt)
+
+    save_to_memory(
+        state["question"],
+        summary
+    )
 
     return {
         "answer": summary
@@ -57,6 +72,11 @@ def analytics_node(state):
 
     result = analyze_document(
         context
+    )
+
+    save_to_memory(
+        state["question"],
+        result
     )
 
     return {
@@ -80,6 +100,10 @@ def answer_node(state):
     prompt = f"""
 You are a helpful assistant.
 
+Conversation History:
+
+{state['memory_context']}
+
 Use ONLY the context below.
 
 Context:
@@ -94,6 +118,11 @@ Answer:
 """
 
     answer = ask_gemini(prompt)
+
+    save_to_memory(
+        state["question"],
+        answer
+    )
 
     return {
         "answer": answer
