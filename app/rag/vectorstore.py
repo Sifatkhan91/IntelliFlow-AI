@@ -1,26 +1,60 @@
+import uuid
 import chromadb
 
-# Persistent database storage
+
 client = chromadb.PersistentClient(
     path="chroma_db"
 )
 
-# Get or create collection
 collection = client.get_or_create_collection(
     name="documents"
 )
 
 
-def store_embeddings(chunks, embeddings):
+def store_embeddings(
+    chunks,
+    embeddings,
+    filename
+):
 
-    for i, (chunk, embedding) in enumerate(
-        zip(chunks, embeddings)
-    ):
-
-        collection.add(
-            documents=[chunk],
-            embeddings=[embedding.tolist()],
-            ids=[str(i)]
+    if len(chunks) == 0:
+        raise ValueError(
+            "Chunks list is empty."
         )
 
-    print("Embeddings stored successfully!")
+    if len(embeddings) == 0:
+        raise ValueError(
+            "Embeddings list is empty."
+        )
+
+    ids = [
+        str(uuid.uuid4())
+        for _ in chunks
+    ]
+
+    metadatas = [
+
+    {
+        "source": filename,
+        "chunk_id": i
+    }
+
+    for i in range(
+        len(chunks)
+    )
+
+]
+
+    collection.add(
+        documents=chunks,
+        embeddings=[
+            embedding.tolist()
+            for embedding in embeddings
+        ],
+        metadatas=metadatas,
+        ids=ids
+    )
+
+    print(
+        f"{len(chunks)} chunks stored for {filename}"
+    )

@@ -1,16 +1,20 @@
-from typing import TypedDict
+from typing import TypedDict, List
 
 
-class AgentState(TypedDict):
+class AgentState(TypedDict, total=False):
 
     question: str
 
     intent: str
 
-    retrieved_docs: str
-
     answer: str
 
-    analysis: str
+    retrieved_docs: str
 
     memory_context: str
+
+    sources: List[str]
+
+    active_document: str
+
+    metadata: list

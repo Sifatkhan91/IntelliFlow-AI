@@ -1,0 +1,18 @@
+[
+  {
+    "question": "what is this document about?",
+    "answer": "\nThis is a small tabular excerpt (18 unique house records, shown as 36 lines because two 6-row groups are duplicated) from a residential dataset. Key points:\n\n- Records: 18 unique entries (IDs 1784–1789, 1709–1714, 1814–1819). Two groups (1784–1789 and 1709–1714) are repeated.\n- Common fields (present for each record): zoning, LotArea, LotConfig, BldgType (all “1Fam”), a numeric house-style field (values 3–9), YearBuilt, YearRemodel/YearSold, Exterior1st, MasVnrArea, TotalBsmtSF, and an empty/NaN Electrical field.\n- Zoning distribution (unique rows): RL = 6, FV = 6, RM = 5, C (all) = 1.\n- LotArea range: 3,300 to 10,800 sq ft.\n- YearBuilt range: 1890 to 2008; YearRemod/related years range: 1950 to 2009.\n- Exterior materials: mostly VinylSd, with MetalSd, Stucco and Wd Sdng also present.\n- MasVnrArea: almost all 0.0 except one record with 360.0.\n- TotalBsmtSF range: 0.0 to 1,836.0 sq ft (many values in the 400–1,300 range).\n- LotConfig: mix of Inside and Corner lots.\n\nOverall, the excerpt shows typical single-family homes with varied lot sizes and ages, predominantly vinyl siding exteriors, minimal masonry veneer, and basement sizes ranging from none to substantial.\n\n---\n\nSources:\n\n📄 HousePricePrediction (1).csv\n"
+  },
+  {
+    "question": "how many rows are there?",
+    "answer": "\n60\n\n---\n\nSources:\n\n📄 HousePricePrediction (1).csv (Chunk 552)\n📄 HousePricePrediction (1).csv (Chunk 329)\n📄 HousePricePrediction (1).csv (Chunk 294)\n📄 HousePricePrediction (1).csv (Chunk 566)\n📄 HousePricePrediction (1).csv (Chunk 537)\n"
+  },
+  {
+    "question": "you know my name?",
+    "answer": "\nI could not find this information in the selected document.\n\n---\n\nSources:\n\n📄 HousePricePrediction (1).csv (Chunk 329)\n📄 HousePricePrediction (1).csv (Chunk 6)\n📄 HousePricePrediction (1).csv (Chunk 166)\n📄 HousePricePrediction (1).csv (Chunk 350)\n📄 HousePricePrediction (1).csv (Chunk 331)\n"
+  },
+  {
+    "question": "my name is Sifat",
+    "answer": "\nI could not find this information in the selected document.\n\n---\n\nSources:\n\n📄 HousePricePrediction (1).csv (Chunk 6)\n📄 HousePricePrediction (1).csv (Chunk 332)\n📄 HousePricePrediction (1).csv (Chunk 284)\n📄 HousePricePrediction (1).csv (Chunk 283)\n📄 HousePricePrediction (1).csv (Chunk 42)\n"
+  }
+]

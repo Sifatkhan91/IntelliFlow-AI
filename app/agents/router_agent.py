@@ -1,57 +1,111 @@
 from app.services.openai_service import ask_openai
 
 
-VALID_INTENTS = [
-    "qa",
-    "summary",
-    "analytics"
-]
-
-
 def classify_intent(question):
 
-    prompt = f"""
-You are an intent classifier.
+    question = question.lower()
 
-Choose ONLY ONE of these intents:
+    # -------------------------
+    # Stats Tool
+    # -------------------------
 
-qa
-summary
-analytics
+    if any(
+        word in question
+        for word in [
+            "statistics",
+            "stats",
+            "metrics",
+            "document statistics",
+            "document stats",
+            "show document statistics",
+            "show stats"
+        ]
+    ):
+        return "tool_stats"
 
-Return ONLY the intent word.
+    # -------------------------
+    # Document Tool
+    # -------------------------
 
-Question:
-{question}
-"""
-
-    try:
-
-        result = ask_openai(prompt)
-
-        result = (
-            result
-            .strip()
-            .lower()
-            .replace(".", "")
-            .replace(",", "")
-            .replace("\n", "")
+    if (
+        "document" in question
+        and any(
+            word in question
+            for word in [
+                "list",
+                "loaded",
+                "available",
+                "show",
+                "which"
+            ]
         )
+    ):
+        return "tool_documents"
 
-        if result not in VALID_INTENTS:
+    # -------------------------
+    # Memory Tool
+    # -------------------------
 
-            print(
-                f"Invalid intent from OpenAI: {result}"
-            )
+    if any(
+        phrase in question
+        for phrase in [
+            "what did we discuss",
+            "discussion history",
+            "conversation history",
+            "conversation summary",
+            "recent discussion",
+            "what have we discussed"
+        ]
+    ):
+        return "tool_memory"
 
-            return "qa"
+    # -------------------------
+    # Memory Node
+    # -------------------------
 
-        return result
+    if any(
+        phrase in question
+        for phrase in [
+            "what did i ask",
+            "previous question",
+            "last question",
+            "remember"
+        ]
+    ):
+        return "memory"
 
-    except Exception as e:
+    # -------------------------
+    # Summary
+    # -------------------------
 
-        print(
-            f"Router Error: {e}"
-        )
+    if any(
+        word in question
+        for word in [
+            "summarize",
+            "summary",
+            "summarise"
+        ]
+    ):
+        return "summary"
 
-        return "qa"
+    # -------------------------
+    # Analytics
+    # -------------------------
+
+    if any(
+        word in question
+        for word in [
+            "analyze",
+            "analyse",
+            "analytics",
+            "insights",
+            "trends"
+        ]
+    ):
+        return "analytics"
+
+    # -------------------------
+    # Default
+    # -------------------------
+
+    return "qa"

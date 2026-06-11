@@ -2,15 +2,50 @@ from app.rag.vectorstore import collection
 from app.rag.embeddings import embedding_model
 
 
-def retrieve_relevant_chunks(query, top_k=3):
+def retrieve_relevant_chunks(
+    query,
+    active_document=None,
+    top_k=10
+):
 
-    # Convert query to embedding
-    query_embedding = embedding_model.encode(query)
-
-    # Search vector DB
-    results = collection.query(
-        query_embeddings=[query_embedding.tolist()],
-        n_results=top_k
+    query_embedding = (
+        embedding_model.encode(query)
     )
 
-    return results["documents"][0]
+    if active_document:
+
+        results = collection.query(
+            query_embeddings=[
+                query_embedding.tolist()
+            ],
+            n_results=top_k,
+            where={
+                "source": active_document
+            }
+        )
+
+    else:
+
+        results = collection.query(
+            query_embeddings=[
+                query_embedding.tolist()
+            ],
+            n_results=top_k
+        )
+
+    documents = results["documents"][0]
+
+    metadata = results["metadatas"][0]
+
+    sources = list(
+        {
+            item["source"]
+            for item in metadata
+        }
+    )
+
+    return {
+    "documents": documents,
+    "metadata": metadata,
+    "sources": sources
+}

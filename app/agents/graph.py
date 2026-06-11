@@ -1,68 +1,157 @@
-from langgraph.graph import StateGraph
+from typing import TypedDict
 
-from app.agents.state import AgentState
+from langgraph.graph import (
+    StateGraph,
+    END
+)
 
-import app.agents.nodes as nodes
+from app.agents.nodes import (
+    router_node,
+    retrieve_node,
+    answer_node,
+    summary_node,
+    analytics_node,
+    memory_node,
+    documents_tool_node,
+    memory_tool_node,
+    stats_tool_node,
+    route_decision
+)
+
+
+class AgentState(TypedDict, total=False):
+
+    question: str
+
+    answer: str
+
+    intent: str
+
+    memory_context: str
+
+    retrieved_docs: str
+
+    sources: list
+
+    active_document: str
 
 
 def build_graph():
 
-    graph = StateGraph(AgentState)
+    workflow = StateGraph(
+        AgentState
+    )
 
-    graph.add_node(
+    workflow.add_node(
         "router",
-        nodes.router_node
+        router_node
     )
 
-    graph.add_node(
+    workflow.add_node(
         "retrieve",
-        nodes.retrieve_node
+        retrieve_node
     )
 
-    graph.add_node(
+    workflow.add_node(
         "answer",
-        nodes.answer_node
+        answer_node
     )
 
-    graph.add_node(
+    workflow.add_node(
         "summary",
-        nodes.summary_node
+        summary_node
     )
 
-    graph.add_node(
+    workflow.add_node(
         "analytics",
-        nodes.analytics_node
+        analytics_node
     )
 
-    graph.set_entry_point(
+    workflow.add_node(
+        "memory",
+        memory_node
+    )
+
+    workflow.add_node(
+        "tool_documents",
+        documents_tool_node
+    )
+
+    workflow.add_node(
+        "tool_memory",
+        memory_tool_node
+    )
+
+    workflow.add_node(
+        "tool_stats",
+        stats_tool_node
+    )
+
+    workflow.set_entry_point(
         "router"
     )
 
-    graph.add_conditional_edges(
+    workflow.add_conditional_edges(
         "router",
-        nodes.route_decision,
+        route_decision,
         {
             "qa": "retrieve",
+
             "summary": "summary",
-            "analytics": "analytics"
+
+            "analytics": "analytics",
+
+            "memory": "memory",
+
+            "tool_documents":
+            "tool_documents",
+
+            "tool_memory":
+            "tool_memory",
+
+            "tool_stats":
+            "tool_stats"
         }
     )
 
-    graph.add_edge(
+    workflow.add_edge(
         "retrieve",
         "answer"
     )
 
-    graph.set_finish_point(
-        "answer"
+    workflow.add_edge(
+        "answer",
+        END
     )
 
-    graph.set_finish_point(
-        "summary"
+    workflow.add_edge(
+        "summary",
+        END
     )
 
-    graph.set_finish_point(
-        "analytics"
+    workflow.add_edge(
+        "analytics",
+        END
     )
 
-    return graph.compile()
+    workflow.add_edge(
+        "memory",
+        END
+    )
+
+    workflow.add_edge(
+        "tool_documents",
+        END
+    )
+
+    workflow.add_edge(
+        "tool_memory",
+        END
+    )
+
+    workflow.add_edge(
+        "tool_stats",
+        END
+    )
+
+    return workflow.compile()
