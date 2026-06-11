@@ -1,6 +1,9 @@
+import os
 import uuid
-import chromadb
 
+os.environ["ANONYMIZED_TELEMETRY"] = "False"
+
+import chromadb
 
 client = chromadb.PersistentClient(
     path="chroma_db"
